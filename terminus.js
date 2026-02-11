@@ -1,11 +1,40 @@
 class Terminal {
-    constructor(columns, id) {
+    constructor(rows, columns, id) {
         //will work on later
         document.getElementById(id).style.width = columns + "ch" //lets say 80 columns, should be width:80ch
+        document.getElementById(id).style.height = rows + "ch" //lets say 80 columns, should be width:80ch
         this.id = id;
     }
 
     print(text){
         document.getElementById(this.id).innerHTML += text
     }
+
+    async cin(){
+        return new Promise((resolve) => {
+            let input = "";
+            const handler = (e) => {
+                console.log(e.key);
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    document.removeEventListener("keydown", handler);
+                    document.getElementById(this.id).innerHTML += "<br>";
+                    resolve(input);
+                } else if (e.key === "Backspace") {
+                    e.preventDefault();
+                    if (input.length > 0) {
+                        input = input.slice(0, -1);
+                        const el = document.getElementById(this.id);
+                        el.innerHTML = el.innerHTML.slice(0, -1);
+                    }
+                } else if (e.key.length === 1) {
+                    e.preventDefault();
+                    input += e.key;
+                    document.getElementById(this.id).innerHTML += e.key;
+                }
+            };
+            document.addEventListener("keydown", handler);
+        });
+    }
+    
 }
