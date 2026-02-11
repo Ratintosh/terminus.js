@@ -2,7 +2,7 @@ class Terminal {
     constructor(rows, columns, id) {
         //will work on later
         document.getElementById(id).style.width = columns + "ch" //lets say 80 columns, should be width:80ch
-        document.getElementById(id).style.height = rows + "ch" //lets say 80 columns, should be width:80ch
+        document.getElementById(id).style.height = rows + "ch" //lets say 24 rows, should be height:24ch
         this.id = id;
     }
 
@@ -35,6 +35,37 @@ class Terminal {
             };
             document.addEventListener("keydown", handler);
         });
+    }
+    
+    async shell(prompt = "") {
+        while (true) {
+            this.print(prompt + "$ ");
+            const input = await this.cin();
+            const result = await this.parse(input);
+            if (result === "exit") break;
+        }
+    }
+
+    async parse(command) {
+        const trimmed = command.trim();
+        
+        if (trimmed === "") {
+            return null;
+        }
+        
+        if (trimmed === "ping") {
+            this.print("pong<br>");
+            return null;
+        }
+        
+        if (trimmed === "exit") {
+            return "exit";
+        }
+        
+        // Unknown command
+        this.print("Unknown command: " + trimmed + "\n");
+        this.print("<br>") //newline
+        return null;
     }
     
 }
