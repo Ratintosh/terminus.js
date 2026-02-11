@@ -1,3 +1,5 @@
 .terminal{
-    font-family: "Ubuntu Mono"
+    font-family: "Ubuntu Mono";
+    background-color: black;
+    color:white;
 }
