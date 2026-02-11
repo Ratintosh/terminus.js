@@ -21,10 +21,16 @@ class CommandRegistry {
 }
 
 class Terminal {
-    constructor(rows, columns, id, commandRegistry) {
-        //will work on later
-        document.getElementById(id).style.width = columns + "ch" //lets say 80 columns, should be width:80ch
-        document.getElementById(id).style.height = rows + "ch" //lets say 24 rows, should be height:24ch
+    constructor(id, commandRegistry, fillParent=false, rows, columns) {
+        if(!fillParent){
+            //rows cols mode (legacy)
+            document.getElementById(id).style.width = columns + "ch" //lets say 80 columns, should be width:80ch
+            document.getElementById(id).style.height = rows + "ch" //lets say 24 rows, should be height:24ch
+        }else{
+            //dynamic mode (modern)
+            document.getElementById(id).style.width = "100vw"
+            document.getElementById(id).style.height = "100vh"
+        }
         this.id = id;
         this.commandRegistry = commandRegistry || new CommandRegistry();
     }

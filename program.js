@@ -3,7 +3,7 @@ commands.register("ping", (terminal) => {
     terminal.print("pong");
 });
 
-const terminal = new Terminal(60, 80, "terminal", commands)
+const terminal = new Terminal("terminal", commands, true, 60, 80)
 
 async function run(){
     terminal.print("Welcome to Terminus!<br>");
