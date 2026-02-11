@@ -1,0 +1,9 @@
+body,html {
+    margin:0px;
+    padding:0px;
+}
+.terminal{
+    font-family: "Ubuntu Mono";
+    background-color: black;
+    color:white;
+}
