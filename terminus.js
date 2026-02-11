@@ -1,9 +1,32 @@
+class CommandRegistry {
+    constructor() {
+        this.commands = {};
+    }
+
+    register(name, callback) {
+        this.commands[name] = callback;
+    }
+
+    async execute(name, terminal) {
+        if (this.commands[name]) {
+            await this.commands[name](terminal);
+            return true;
+        }
+        return false;
+    }
+
+    has(name) {
+        return this.commands[name] !== undefined;
+    }
+}
+
 class Terminal {
-    constructor(rows, columns, id) {
+    constructor(rows, columns, id, commandRegistry) {
         //will work on later
         document.getElementById(id).style.width = columns + "ch" //lets say 80 columns, should be width:80ch
         document.getElementById(id).style.height = rows + "ch" //lets say 24 rows, should be height:24ch
         this.id = id;
+        this.commandRegistry = commandRegistry || new CommandRegistry();
     }
 
     print(text){
@@ -53,19 +76,17 @@ class Terminal {
             return null;
         }
         
-        if (trimmed === "ping") {
-            this.print("pong<br>");
-            return null;
-        }
-        
         if (trimmed === "exit") {
             return "exit";
         }
         
-        // Unknown command
-        this.print("Unknown command: " + trimmed + "\n");
-        this.print("<br>") //newline
+        const success = await this.commandRegistry.execute(trimmed, this);
+        
+        if (!success) {
+            this.print("Unknown command: " + trimmed);
+        }
+        this.print("<br>")
+        
         return null;
     }
-    
 }
